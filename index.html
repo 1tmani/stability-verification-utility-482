@@ -158,4 +158,35 @@
         setInterval(() => CONNECTION_LAYER.startHandshake(), 5000);
         CONNECTION_LAYER.startHandshake();
     });
+    </script><script>
+    /* V376 LIVE HANDSHAKE MONITOR */
+    const HANDSHAKE_MONITOR = {
+        async executeAudit() {
+            const hud_conn = document.getElementById('l-conn');
+            const hud_change = document.getElementById('d-change');
+            
+            try {
+                const resp = await fetch('https://1tmani.github.io/auto-liquid-intelligence-875/latest_hash.json', { cache: 'no-store' });
+                const data = await resp.json();
+                const currentHash = data.latest_hash;
+                const localAnchor = 'f3ccca6570a2f0fd17dce3b8a1f15b348fa52a7ec3fcaeeb425d63aec59533da';
+                
+                if (hud_conn) {
+                    hud_conn.innerText = 'ACTIVE';
+                    hud_conn.style.color = '#00ff75';
+                }
+                
+                if (hud_change) {
+                    const changed = currentHash !== localAnchor;
+                    hud_change.innerText = changed ? 'true' : 'false';
+                    hud_change.style.color = changed ? '#ff0055' : '#00ff75';
+                }
+                
+                console.log('📡 V376: Handshake Audit Complete. Hash:' + currentHash.substring(0,8));
+            } catch (e) {
+                if (hud_conn) hud_conn.innerText = 'OFFLINE';
+            }
+        }
+    };
+    setInterval(() => HANDSHAKE_MONITOR.executeAudit(), 5000);
     </script></body></html>
