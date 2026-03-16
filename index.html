@@ -103,4 +103,19 @@
             const isMatch = hash === "f3ccca6570a2f0fd17dce3b8a1f15b348fa52a7ec3fcaeeb425d63aec59533da";
             VERIFY_AUDIO.playResult(isMatch);
         };
-        </script><script>const AUDIO_SIG = { ctx: null, init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }, playError() { this.init(); const o = this.ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.setValueAtTime(110, this.ctx.currentTime); const g = this.ctx.createGain(); g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.8); o.connect(g).connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.8); } };</script></body></html>
+        </script><script>const AUDIO_SIG = { ctx: null, init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }, playError() { this.init(); const o = this.ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.setValueAtTime(110, this.ctx.currentTime); const g = this.ctx.createGain(); g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.8); o.connect(g).connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.8); } };</script><script>
+    /* V370 JSON BRIDGE: Real Network Handshake */
+    const JSON_BRIDGE = {
+        source: 'https://1tmani.github.io/auto-liquid-intelligence-875/latest_hash.json',
+        async fetchProducerHash() {
+            try {
+                const resp = await fetch(this.source, { cache: 'no-store' });
+                const data = await resp.json();
+                const foundHash = data.latest_hash;
+                console.log('📡 JSON_BRIDGE: Fetched Hash:', foundHash);
+                if(typeof verifyCycle === 'function') verifyCycle(foundHash);
+            } catch(e) { console.warn('📡 JSON_BRIDGE: Connection Reset'); }
+        }
+    };
+    setInterval(() => JSON_BRIDGE.fetchProducerHash(), 5000);
+    </script></body></html>
