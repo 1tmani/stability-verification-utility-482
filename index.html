@@ -56,4 +56,28 @@
         };
         // Extend existing verifyCycle if present, or run independent observer
         window.addEventListener('load', () => VERIFY_MEMORY.render());
+        </script><script>
+        /* V350 LIVE POLLING LAYER: Autonomous Vision */
+        const NEURAL_POLLER = {
+            producer: 'https://1tmani.github.io/auto-liquid-intelligence-875/',
+            lastDetectedHash: '',
+            isPolling: true,
+            
+            async scanProducer() {
+                if(!this.isPolling) return;
+                try {
+                    const resp = await fetch(this.producer, { cache: 'no-store' });
+                    const text = await resp.text();
+                    const hashPattern = /[a-fA-F0-9]{64}/;
+                    const foundHash = text.match(hashPattern);
+                    
+                    if(foundHash && foundHash[0] !== this.lastDetectedHash) {
+                        this.lastDetectedHash = foundHash[0];
+                        console.log('📡 V350: New Producer Hash Detected:', this.lastDetectedHash);
+                        if(typeof verifyCycle === 'function') verifyCycle(this.lastDetectedHash);
+                    }
+                } catch(e) { console.warn('📡 V350: Polling Handshake Interrupted'); }
+            }
+        };
+        setInterval(() => NEURAL_POLLER.scanProducer(), 5000);
         </script></body></html>
