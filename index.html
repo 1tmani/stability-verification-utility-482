@@ -103,4 +103,4 @@
             const isMatch = hash === "f3ccca6570a2f0fd17dce3b8a1f15b348fa52a7ec3fcaeeb425d63aec59533da";
             VERIFY_AUDIO.playResult(isMatch);
         };
-        </script></body></html>
+        </script><script>const AUDIO_SIG = { ctx: null, init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }, playError() { this.init(); const o = this.ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.setValueAtTime(110, this.ctx.currentTime); const g = this.ctx.createGain(); g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.8); o.connect(g).connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.8); } };</script></body></html>
