@@ -33,4 +33,27 @@
     const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');let w,h,t=0;function res(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;}res();
     function draw(){t+=0.01;ctx.fillStyle='rgba(0,0,0,0.15)';ctx.fillRect(0,0,w,h);ctx.strokeStyle='var(--p)';
     for(let i=0; i<8; i++){ctx.beginPath();ctx.arc(w/2, h/2, 100+i*30+Math.sin(t+i)*20, 0, Math.PI*2);ctx.stroke();}requestAnimationFrame(draw);}draw();
-    </script><div style='border:1px solid #00ff75; padding:10px; margin-top:10px; font-family:Orbitron; font-size:12px;'><div style='color:#00ff75'>● HASH MATCHED</div><div style='color:#00ff75'>● OUTPUT CONFIRMED</div></div><div style='display:none'>ROLE_FROZEN</div></body></html>
+    </script><div style='border:1px solid #00ff75; padding:10px; margin-top:10px; font-family:Orbitron; font-size:12px;'><div style='color:#00ff75'>● HASH MATCHED</div><div style='color:#00ff75'>● OUTPUT CONFIRMED</div></div><div style='display:none'>ROLE_FROZEN</div><script>
+        /* VERIFICATION_MEMORY_LAYER_V1 */
+        const VERIFY_MEMORY = {
+            history: JSON.parse(localStorage.getItem('v_history') || '[]'),
+            save(hash) {
+                this.history.unshift({ h: hash, ts: new Date().toISOString() });
+                if(this.history.length > 5) this.history.pop();
+                localStorage.setItem('v_history', JSON.stringify(this.history));
+                this.render();
+            },
+            render() {
+                let box = document.getElementById('v-memory-box');
+                if(!box) {
+                    box = document.createElement('div');
+                    box.id = 'v-memory-box';
+                    box.style.cssText = "margin-top:20px; border-top:1px solid #333; padding-top:10px; font-size:9px; opacity:0.5;";
+                    document.querySelector('.hud').appendChild(box);
+                }
+                box.innerHTML = 'MEMORY_LOG:<br>' + this.history.map(i => `> ${i.h.substring(0,8)}... [${i.ts.split('T')[1].substring(0,5)}]`).join('<br>');
+            }
+        };
+        // Extend existing verifyCycle if present, or run independent observer
+        window.addEventListener('load', () => VERIFY_MEMORY.render());
+        </script></body></html>
