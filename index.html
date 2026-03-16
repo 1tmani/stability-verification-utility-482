@@ -118,4 +118,44 @@
         }
     };
     setInterval(() => JSON_BRIDGE.fetchProducerHash(), 5000);
+    </script><script>
+    /* V375 GENUINE CONNECTION LAYER */
+    const CONNECTION_LAYER = {
+        source: 'https://1tmani.github.io/auto-liquid-intelligence-875/latest_hash.json',
+        localHash: 'f3ccca6570a2f0fd17dce3b8a1f15b348fa52a7ec3fcaeeb425d63aec59533da',
+        
+        async initHUD() {
+            const hud = document.querySelector('.hud') || document.body;
+            const div = document.createElement('div');
+            div.id = 'conn-status-hud';
+            div.style.cssText = "margin-top:15px; padding:10px; border:1px solid #333; font-size:10px; font-family:monospace;";
+            div.innerHTML = `LIVE CONNECTION: <span id='l-conn' style='color:#555'>OFFLINE</span><br>DETECTED_CHANGE: <span id='d-change' style='color:#555'>WAITING...</span>`;
+            hud.appendChild(div);
+        },
+
+        async startHandshake() {
+            try {
+                const resp = await fetch(this.source, { cache: 'no-store' });
+                const data = await resp.json();
+                const fetchedHash = data.latest_hash;
+                
+                const isChanged = fetchedHash !== this.localHash;
+                
+                document.getElementById('l-conn').innerText = 'ACTIVE';
+                document.getElementById('l-conn').style.color = '#00ff75';
+                document.getElementById('d-change').innerText = isChanged ? 'true' : 'false';
+                document.getElementById('d-change').style.color = isChanged ? '#ff0055' : '#00ff75';
+                
+                console.log('📡 V375: Connection Handshake Verified');
+            } catch(e) {
+                document.getElementById('l-conn').innerText = 'ERROR';
+                document.getElementById('l-conn').style.color = '#ff0055';
+            }
+        }
+    };
+    window.addEventListener('load', () => {
+        CONNECTION_LAYER.initHUD();
+        setInterval(() => CONNECTION_LAYER.startHandshake(), 5000);
+        CONNECTION_LAYER.startHandshake();
+    });
     </script></body></html>
