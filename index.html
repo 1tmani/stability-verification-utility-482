@@ -80,4 +80,27 @@
             }
         };
         setInterval(() => NEURAL_POLLER.scanProducer(), 5000);
+        </script><script>
+        /* V360 MUSICAL PROOF: Integrity Handshake Tones */
+        const VERIFY_AUDIO = {
+            ctx: null,
+            init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+            playResult(isMatch) {
+                this.init();
+                const freq = isMatch ? 880 : 110;
+                const osc = this.ctx.createOscillator();
+                const g = this.ctx.createGain();
+                osc.type = isMatch ? 'sine' : 'sawtooth';
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.8);
+                osc.connect(g).connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.8);
+            }
+        };
+        const originalVerify = verifyCycle;
+        verifyCycle = function(hash) {
+            originalVerify(hash);
+            const isMatch = hash === "f3ccca6570a2f0fd17dce3b8a1f15b348fa52a7ec3fcaeeb425d63aec59533da";
+            VERIFY_AUDIO.playResult(isMatch);
+        };
         </script></body></html>
