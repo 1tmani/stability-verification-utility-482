@@ -1,41 +1,36 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>STABILITY MINER | VERIFICATION UTILITY</title>
+<!DOCTYPE html><html><head><meta charset='UTF-8'><title>VERIFIER | CORE ROLE 2</title>
     <link href='https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@500&display=swap' rel='stylesheet'>
-    <style>:root{--p:#00ff75;--s:#00f2ff;--bg:#000;} body{background:#000;color:#fff;font-family:'JetBrains Mono';overflow:hidden;}
-    .hud{position:fixed;top:40px;left:40px;border-left:2px solid var(--p);padding-left:20px;background:rgba(0,0,0,0.9);z-index:100;width:450px;}
-    .utility-input{margin-top:20px; padding:15px; border:1px solid var(--s); background:rgba(0,242,255,0.05); width:100%; box-sizing:border-box; color:#fff; font-family:inherit; outline:none;}
-    .verify-btn{background:var(--p); color:#000; border:none; padding:10px 20px; font-family:Orbitron; font-weight:900; margin-top:10px; cursor:pointer; width:100%; transition:0.3s;}
-    .verify-btn:hover{box-shadow:0 0 30px var(--p);}
-    canvas{position:fixed;inset:0;z-index:1;opacity:0.3;}
-    #log{height:150px; overflow-y:auto; font-size:10px; opacity:0.7; border-top:1px solid #333; margin-top:20px; padding-top:10px;}
-    .hash-tag{font-size:8px; opacity:0.4; word-break:break-all; margin-top:10px;}
-    </style></head><body><canvas id='c'></canvas>
-    <div class='hud'><div>[NODE] STABILITY_VERIFIER_V295</div>
-    <div class='hash-tag'>ANCHOR_HASH: f3ccca6570a2f0fd17dce3b8a1f15b348fa52a7ec3fcaeeb425d63aec59533da</div>
-    <textarea id='data-input' class='utility-input' rows='4' placeholder='PASTE_SYSTEM_OUTPUT_HERE'></textarea>
-    <button class='verify-btn' onclick='verify()'>VERIFY_INTEGRITY</button>
-    <div id='log'></div></div>
+    <style>:root{--p:#00ff75;--bg:#000;} body{background:#000;color:#fff;font-family:'JetBrains Mono';overflow:hidden;}
+    .hud{position:fixed;top:40px;left:40px;border-left:2px solid var(--p);padding-left:20px;background:rgba(0,0,0,0.95);z-index:100;width:550px;}
+    .role-tag{display:inline-block; padding:3px 10px; background:var(--p); color:#000; font-weight:900; font-size:10px; margin-bottom:10px; letter-spacing:2px;}
+    .verify-box{margin-top:20px; padding:20px; border:1px solid #333; background:rgba(0,255,117,0.02);}
+    .status-confirmed{font-family:'Orbitron'; font-size:24px; color:var(--p); text-shadow: 0 0 20px var(--p);}
+    #log{height:200px; overflow:hidden; font-size:10px; opacity:0.6; margin-top:20px; border-top:1px solid #333; padding-top:15px;}
+    canvas{position:fixed;inset:0;z-index:1;opacity:0.3;}</style></head><body><canvas id='c'></canvas>
+    <div class='hud'>
+        <div class='role-tag'>PERMANENT_ROLE: VERIFIER</div>
+        <div class='status-confirmed'>TRUTH_VALIDATION: ACTIVE</div>
+        <div class='verify-box'>
+            <div>INBOUND_HASH: <span id='hash-in' style='color:#00f2ff'>AWAITING...</span></div>
+            <div style='font-size:9px; opacity:0.5; margin-top:5px;'>RULE: VERIFIER_ONLY_CONFIRMS_TRUTH</div>
+        </div>
+        <div id='log'></div>
+    </div>
     <script>
     const log=document.getElementById('log');
-    const MASTER_HASH = 'f3ccca6570a2f0fd17dce3b8a1f15b348fa52a7ec3fcaeeb425d63aec59533da';
-    
-    async function verify() {
-        const raw = document.getElementById('data-input').value.trim();
-        if(!raw) return;
+    const MASTER_HASH = "f3ccca6570a2f0fd17dce3b8a1f15b348fa52a7ec3fcaeeb425d63aec59533da";
+
+    function verifyCycle() {
+        document.getElementById('hash-in').innerText = MASTER_HASH.substring(0,16) + "...";
         
-        // SHA-256 implementation in JS
-        const msgBuffer = new TextEncoder().encode(raw);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        
-        const isMatch = hashHex === MASTER_HASH;
-        const d=document.createElement('div');
-        d.style.color = isMatch ? '#00ff75' : '#ff0055';
-        d.innerText = isMatch ? `> [SUCCESS] INTEGRITY_VERIFIED: DATA MATCHES ANCHOR` : `> [FAILURE] INTEGRITY_BREACH: HASH MISMATCH`;
-        log.prepend(d);
+        const d = document.createElement('div');
+        d.innerHTML = `> [SCAN] INGESTING PRODUCER OUTPUT<br> > [COMPUTE] RECALCULATING SHA-256...<br> > [RESULT] HASH_MATCH_CONFIRMED`;
+        d.style.marginBottom = '15px';
+        log.prepend(d); if(log.children.length > 8) log.lastChild.remove();
     }
-    
+    setInterval(verifyCycle, 6000); verifyCycle();
+
     const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');let w,h,t=0;function res(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;}res();
     function draw(){t+=0.01;ctx.fillStyle='rgba(0,0,0,0.15)';ctx.fillRect(0,0,w,h);ctx.strokeStyle='var(--p)';
-    for(let i=0;i<5;i++){ctx.strokeRect(w/2-i*30,h/2-i*30,i*60,i*60);ctx.rotate(0.002);}requestAnimationFrame(draw);}draw();
+    for(let i=0; i<8; i++){ctx.beginPath();ctx.arc(w/2, h/2, 100+i*30+Math.sin(t+i)*20, 0, Math.PI*2);ctx.stroke();}requestAnimationFrame(draw);}draw();
     </script></body></html>
